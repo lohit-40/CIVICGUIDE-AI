@@ -17,7 +17,7 @@ beforeEach(() => {
       ok: true,
       json: () => Promise.resolve({ hint: 'Mock AI hint for testing' }),
     })
-  ) as any;
+  ) as unknown as typeof fetch;
 });
 
 describe('Quiz Component — Rendering', () => {

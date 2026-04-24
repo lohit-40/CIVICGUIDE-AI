@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Trash2, Loader2, Sparkles, MessageSquare } from 'lucide-react';
+import { Send, Bot, User, Trash2, Loader2, Sparkles } from 'lucide-react';
 
 interface Message {
   role: 'user' | 'model';
@@ -33,7 +33,7 @@ export function AIChat() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userMsg.trim() || loading) return;
+    if (!input.trim() || loading) return;
 
     const userText = input.trim();
     setInput('');
@@ -54,15 +54,14 @@ export function AIChat() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       setMessages(prev => [...prev, { role: 'model', text: data.reply }]);
-    } catch (error: any) {
-      setMessages(prev => [...prev, { role: 'model', text: `⚠️ Error: ${error.message || 'Failed to connect to AI.'}` }]);
+    } catch (error: Error | unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to connect to AI.';
+      setMessages(prev => [...prev, { role: 'model', text: `⚠️ Error: ${errorMessage}` }]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Helper for actual form submission
-  const userMsg = input;
 
   const clearChat = () => {
     setMessages([{ role: 'model', text: 'Chat cleared. How can I help you today?' }]);
@@ -173,12 +172,12 @@ export function AIChat() {
             </div>
           ))}
           {loading && (
-            <div style={{ display: 'flex', gap: 12 }}>
+            <div role="status" aria-label="AI is generating a response" style={{ display: 'flex', gap: 12 }}>
               <div style={{ width: 32, height: 32, background: 'var(--fg)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid var(--border)' }}>
-                <Bot className="w-4 h-4 text-white" />
+                <Bot className="w-4 h-4 text-white" aria-hidden="true" />
               </div>
               <div style={{ padding: '0.75rem 1rem', border: '3px solid var(--border)', background: '#fff', boxShadow: '3px 3px 0 var(--border)', display: 'flex', alignItems: 'center', gap: 10 }}>
-                <Loader2 className="w-4 h-4 animate-spin text-saffron" />
+                <Loader2 className="w-4 h-4 animate-spin text-saffron" aria-hidden="true" />
                 <span style={{ fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase' }}>GEMINI IS THINKING...</span>
               </div>
             </div>
@@ -189,11 +188,17 @@ export function AIChat() {
         {/* Input Form */}
         <form onSubmit={handleSubmit} style={{ padding: '1rem 1.5rem', background: '#fff', borderTop: '3px solid var(--border)' }}>
           <div style={{ display: 'flex', gap: 12 }}>
+            <label htmlFor="civic-chat-input" className="sr-only">Ask a question about Indian elections</label>
             <input
+              id="civic-chat-input"
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="ASK ANYTHING ABOUT INDIAN ELECTIONS..."
+              aria-label="Ask a question about Indian elections"
+              aria-required="true"
+              autoComplete="off"
+              maxLength={1000}
               style={{ flex: 1, padding: '12px 16px', border: '3px solid var(--border)', fontWeight: 700, fontSize: '0.9rem', outline: 'none', background: 'var(--bg)' }}
               disabled={loading}
             />
@@ -201,9 +206,10 @@ export function AIChat() {
               type="submit" 
               disabled={loading || !input.trim()}
               className="brut-btn brut-btn-saffron"
+              aria-label="Send message to CivicGuide AI"
               style={{ padding: '0 20px' }}
             >
-              <Send className="w-5 h-5" />
+              <Send className="w-5 h-5" aria-hidden="true" />
             </button>
           </div>
         </form>

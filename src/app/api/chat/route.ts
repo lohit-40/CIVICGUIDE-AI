@@ -15,7 +15,7 @@ const MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash-lite', 'gemini-flash-lates
 // In-memory rate limiting map
 const rateLimit = new Map<string, { count: number, timestamp: number }>();
 
-async function tryGenerate(ai: any, modelName: string, systemInstruction: string, contents: any[]) {
+async function tryGenerate(ai: GoogleGenerativeAI, modelName: string, systemInstruction: string, contents: { role: string; parts: { text: string }[] }[]) {
   const model = ai.getGenerativeModel({
     model: modelName,
     systemInstruction,
@@ -47,12 +47,26 @@ export async function POST(req: Request) {
     const ai = new GoogleGenerativeAI(apiKey);
     const { message, contextStep, history = [] } = await req.json();
 
-    if (!message || !contextStep) {
-      return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
+    // Input validation — prevent oversized payloads and prompt injection attempts
+    if (!message || typeof message !== 'string' || message.trim().length === 0) {
+      return NextResponse.json({ error: 'Message is required.' }, { status: 400 });
+    }
+    if (message.length > 1000) {
+      return NextResponse.json({ error: 'Message too long. Max 1000 characters.' }, { status: 400 });
+    }
+    if (!contextStep || typeof contextStep !== 'string') {
+      return NextResponse.json({ error: 'Missing context step.' }, { status: 400 });
+    }
+    if (!Array.isArray(history)) {
+      return NextResponse.json({ error: 'Invalid history format.' }, { status: 400 });
     }
 
+    // Sanitize: strip any potential HTML tags from user input
+    const sanitizedMessage = message.replace(/<[^>]*>/g, '').trim();
+    const sanitizedContext = contextStep.replace(/<[^>]*>/g, '').trim().slice(0, 200);
+
     const systemInstruction = `You are CivicGuide AI — a helpful, non-partisan, highly accurate Election Process Education assistant for the Indian Election System (Lok Sabha).
-The user is currently looking at the step: "${contextStep}".
+The user is currently looking at the step: "${sanitizedContext}".
 Rules:
 - Be clear, concise and factual. Max 200 words unless a list is needed.
 - Avoid partisan language. Represent all major viewpoints fairly.
@@ -60,28 +74,29 @@ Rules:
 - If unsure about a local rule, say so and suggest the official ECI website (eci.gov.in).
 - Do not use markdown headers (#). Use bold (**word**) sparingly.`;
 
-    const contents = history.slice(-8).map((turn: any) => ({
+    const contents = history.slice(-8).map((turn: { role: string; text: string }) => ({
       role: turn.role === 'user' ? 'user' : 'model',
       parts: [{ text: turn.text }]
     }));
-    contents.push({ role: 'user', parts: [{ text: message }] });
+    contents.push({ role: 'user', parts: [{ text: sanitizedMessage }] });
 
     // Try models in order, falling back on 503/overload errors
-    let lastError: any;
+    let lastError: unknown;
     for (const modelName of MODELS) {
       try {
         const reply = await tryGenerate(ai, modelName, systemInstruction, contents);
         return NextResponse.json({ reply });
-      } catch (apiError: any) {
-        const is503 = apiError.status === 503 ||
-          apiError.message?.includes('503') ||
-          apiError.message?.includes('overloaded') ||
-          apiError.message?.includes('UNAVAILABLE');
+      } catch (apiError: unknown) {
+        const err = apiError as { status?: number; message?: string };
+        const is503 = err.status === 503 ||
+          err.message?.includes('503') ||
+          err.message?.includes('overloaded') ||
+          err.message?.includes('UNAVAILABLE');
         if (is503) {
-          lastError = apiError;
+          lastError = err;
           continue; // Try next model
         }
-        throw apiError; // Not a 503, rethrow immediately
+        throw err; // Not a 503, rethrow immediately
       }
     }
 
@@ -89,8 +104,9 @@ Rules:
     console.error('All models overloaded:', lastError);
     return NextResponse.json({ reply: '⚠️ All AI models are currently busy. Please try again in a moment.' });
 
-  } catch (error: any) {
-    console.error('Chat error:', error);
-    return NextResponse.json({ error: error.message || 'Server error. Please try again.' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    console.error('Chat error:', err);
+    return NextResponse.json({ error: err.message || 'Server error. Please try again.' }, { status: 500 });
   }
 }

@@ -28,7 +28,7 @@ export default function Error({
         </h1>
         
         <p style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '2.5rem', lineHeight: 1.6 }}>
-          We encountered an unexpected issue while loading this civic resource. Don't worry, democracy is still intact.
+          We encountered an unexpected issue while loading this civic resource. Don&apos;t worry, democracy is still intact.
         </p>
 
         <button

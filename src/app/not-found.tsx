@@ -19,7 +19,7 @@ export default function NotFound() {
         </h2>
 
         <p style={{ fontSize: '1.1rem', fontWeight: 500, marginBottom: '3rem', color: '#444' }}>
-          This page is missing, much like an unregistered voter on election day. Let's get you back to the official portals.
+          This page is missing, much like an unregistered voter on election day. Let&apos;s get you back to the official portals.
         </p>
 
         <Link href="/" className="brut-btn" style={{ background: 'var(--fg)', color: '#fff', fontSize: '1rem', padding: '16px 32px' }}>

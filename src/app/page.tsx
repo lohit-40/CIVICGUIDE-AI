@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Timeline } from '@/components/Timeline';
 import { AIChat } from '@/components/AIChat';
 import { CivicLookup } from '@/components/CivicLookup';
 import { Quiz } from '@/components/Quiz';
 import { NewsPage } from '@/components/NewsPage';
 import { useAuth } from '@/components/AuthProvider';
-import { LogIn, LogOut, ArrowDown, ArrowRight, Newspaper, Brain, MapPin, MessageCircle, ListOrdered, Menu, X } from 'lucide-react';
+import { LogIn, LogOut, ArrowRight, Newspaper, Brain, MapPin, MessageCircle, ListOrdered, Menu, X } from 'lucide-react';
 
 type Tab = 'timeline' | 'chat' | 'civic' | 'quiz' | 'news';
 
@@ -137,6 +137,7 @@ export default function Home() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {user ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={user.photoURL || ''} alt="Profile" style={{ width: 32, height: 32, border: '2px solid var(--saffron)' }} />
                 <button onClick={logOut} className="brut-btn" style={{ padding: '6px 12px', fontSize: '0.75rem', background: 'transparent', border: '2px solid #fff', color: '#fff', boxShadow: 'none' }}>
                   <LogOut className="w-3 h-3" /> SIGN OUT
@@ -148,15 +149,22 @@ export default function Home() {
               </button>
             )}
             {/* Mobile menu toggle */}
-            <button className="md:hidden" onClick={() => setMobileMenuOpen(v => !v)} style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', padding: 4 }}>
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <button
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(v => !v)}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav"
+              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', padding: 4 }}
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
             </button>
           </div>
         </div>
 
         {/* Mobile dropdown */}
         {mobileMenuOpen && (
-          <div style={{ borderTop: '3px solid var(--saffron)', background: '#111' }}>
+          <div id="mobile-nav" role="navigation" aria-label="Mobile navigation" style={{ borderTop: '3px solid var(--saffron)', background: '#111' }}>
             {[
               { id: 'timeline', label: '📋 TIMELINE' },
               { id: 'chat',     label: '💬 AI CHAT' },
@@ -174,7 +182,7 @@ export default function Home() {
       </header>
 
       {/* ============ MARQUEE STRIP ============ */}
-      <div style={{ background: 'var(--saffron)', borderBottom: '3px solid var(--border)', overflow: 'hidden', padding: '8px 0' }}>
+      <div aria-hidden="true" style={{ background: 'var(--saffron)', borderBottom: '3px solid var(--border)', overflow: 'hidden', padding: '8px 0' }}>
         <div className="marquee-track" style={{ display: 'flex', whiteSpace: 'nowrap', width: 'max-content' }}>
           {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
             <span key={i} style={{ fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.15em', color: '#fff', marginRight: 48 }}>
@@ -192,7 +200,7 @@ export default function Home() {
             {/* Left: Text */}
             <div style={{ maxWidth: 760 }}>
               <div className="brut-tag brut-tag-saffron" style={{ marginBottom: '1.5rem' }}>
-                ★ BUILT FOR INDIA'S DEMOCRACY
+                ★ BUILT FOR INDIA&apos;S DEMOCRACY
               </div>
 
               <h1 style={{
@@ -321,7 +329,7 @@ export default function Home() {
       </section>
 
       {/* ============ APP SECTION ============ */}
-      <section ref={appRef} style={{ minHeight: '100vh', padding: '4rem 0 0' }}>
+      <main id="main-content" ref={appRef} style={{ minHeight: '100vh', padding: '4rem 0 0' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 1.5rem' }}>
           {/* Section header */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
@@ -385,7 +393,7 @@ export default function Home() {
             {activeTab === 'news' && <NewsPage />}
           </div>
         </div>
-      </section>
+      </main>
 
       {/* ============ FOOTER ============ */}
       <footer style={{ background: 'var(--fg)', color: '#fff', borderTop: '3px solid var(--border)', padding: '3rem 1.5rem' }}>

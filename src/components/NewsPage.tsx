@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Newspaper, ExternalLink, Clock, RefreshCw, AlertTriangle, Rss, ArrowRight } from 'lucide-react';
+import { Newspaper, Clock, RefreshCw, AlertTriangle, Rss, ArrowRight } from 'lucide-react';
 
 interface Article {
   title: string;
@@ -47,13 +47,15 @@ export function NewsPage() {
       if (!res.ok) throw new Error(data.error || 'Failed to load news');
       setArticles(data.articles);
       setLastRefresh(new Date());
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchNews(); }, []);
 
   return (

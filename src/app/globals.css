@@ -208,6 +208,34 @@ h1, h2, h3, h4 {
 .brut-section-yellow { background: var(--yellow); color: var(--fg); }
 .brut-section-muted { background: var(--muted-bg); }
 
+/* Skip Link */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: -1;
+  padding: 0;
+}
+
+.skip-link:focus {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 16px;
+  width: auto;
+  height: auto;
+  z-index: 9999;
+  padding: 12px 24px;
+  background: var(--saffron);
+  color: #fff;
+  font-weight: 800;
+  border: 3px solid var(--border);
+  box-shadow: 4px 4px 0 var(--border);
+  outline: none;
+}
+
 /* Override glass-card to brutalism */
 .glass-card {
   background: var(--card-bg);

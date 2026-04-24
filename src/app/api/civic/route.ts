@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-function getDemoData(address: string) {
+function getDemoData() {
   return {
     election: { name: 'Example General Election', electionDay: '2024-11-05' },
     pollingLocations: [
@@ -38,15 +38,14 @@ export async function POST(req: Request) {
     const apiKey = process.env.CIVIC_API_KEY;
 
     if (!apiKey) {
-      // Return demo data if no key is configured
-      return NextResponse.json({ demo: true, data: getDemoData(address) });
+      return NextResponse.json({ demo: true, data: getDemoData() });
     }
 
     const url = `https://civicinfo.googleapis.com/civicinfo/v2/voterinfo?key=${apiKey}&address=${encodeURIComponent(address)}`;
     const response = await fetch(url);
 
     if (!response.ok) {
-      return NextResponse.json({ demo: true, data: getDemoData(address) });
+      return NextResponse.json({ demo: true, data: getDemoData() });
     }
 
     const data = await response.json();
@@ -54,6 +53,6 @@ export async function POST(req: Request) {
 
   } catch (error) {
     console.error('Civic API error:', error);
-    return NextResponse.json({ demo: true, data: getDemoData('') });
+    return NextResponse.json({ demo: true, data: getDemoData() });
   }
 }

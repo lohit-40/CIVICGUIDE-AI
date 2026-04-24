@@ -43,8 +43,9 @@ export async function GET() {
     }
 
     return NextResponse.json({ articles: items });
-  } catch (error: any) {
-    console.error('News fetch error:', error);
-    return NextResponse.json({ articles: [], error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    console.error('News fetch error:', err);
+    return NextResponse.json({ articles: [], error: err.message }, { status: 500 });
   }
 }

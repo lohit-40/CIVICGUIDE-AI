@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { MapPin, ExternalLink, ShieldCheck, Building, HelpCircle, Search } from 'lucide-react';
+import { MapPin, ExternalLink, ShieldCheck, HelpCircle, Search } from 'lucide-react';
 
 export function CivicLookup() {
   const [pincode, setPincode] = useState('');
@@ -63,7 +63,7 @@ export function CivicLookup() {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                 <div style={{ width: 44, height: 44, background: item.color, border: '2px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '2px 2px 0 var(--border)' }}>
-                  {React.cloneElement(item.icon as React.ReactElement<any>, { className: "w-5 h-5 text-white" })}
+                  {React.cloneElement(item.icon as React.ReactElement<{ className: string }>, { className: "w-5 h-5 text-white" })}
                 </div>
                 <ExternalLink className="w-5 h-5 text-gray-400" />
               </div>

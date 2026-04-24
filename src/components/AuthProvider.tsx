@@ -39,11 +39,10 @@ export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!!auth);
 
   useEffect(() => {
     if (!auth) {
-      setLoading(false);
       return;
     }
 
@@ -62,16 +61,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     try {
       await signInWithPopup(auth, provider);
-    } catch (error: any) {
-      console.error("Sign in error:", error);
-      if (error.code === 'auth/configuration-not-found') {
+    } catch (error: unknown) {
+      const authError = error as { code?: string; message?: string };
+      console.error("Sign in error:", authError);
+      if (authError.code === 'auth/configuration-not-found') {
         alert('⚠️ Google Sign-In is not enabled in your Firebase project.\n\nPlease go to:\nFirebase Console → Authentication → Sign-in method → Enable Google Sign-In.');
-      } else if (error.code === 'auth/popup-blocked') {
+      } else if (authError.code === 'auth/popup-blocked') {
         alert('⚠️ Popup was blocked by your browser. Please allow popups for this site.');
-      } else if (error.code === 'auth/cancelled-popup-request') {
+      } else if (authError.code === 'auth/cancelled-popup-request') {
         // User closed the popup, do nothing
       } else {
-        alert(`Sign in failed: ${error.message}`);
+        alert(`Sign in failed: ${authError.message}`);
       }
     }
   };
