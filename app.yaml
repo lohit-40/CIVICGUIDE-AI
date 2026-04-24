@@ -1,0 +1,19 @@
+# app.yaml for Google App Engine (Standard Environment)
+runtime: nodejs20
+env: standard
+
+instance_class: F1
+
+# Handlers aren't strictly necessary for Next.js 
+# App Engine will automatically run `npm start`
+handlers:
+  - url: /.*
+    secure: always
+    redirect_http_response_code: 301
+    script: auto
+
+env_variables:
+  # The following variables should be set in Google Cloud Secret Manager or App Engine settings
+  # GEMINI_API_KEY: "your_api_key_here"
+  # CIVIC_API_KEY: "your_civic_api_key_here"
+  NEXT_TELEMETRY_DISABLED: "1"
