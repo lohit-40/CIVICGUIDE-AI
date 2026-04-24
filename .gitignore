@@ -1,2 +1,13 @@
 node_modules/
 .env
+
+# GSD Framework files (not part of submission)
+.agent/
+.agents/
+.gsd/
+adapters/
+docs/
+scripts/
+GSD-STYLE.md
+PROJECT_RULES.md
+model_capabilities.yaml
