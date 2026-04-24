@@ -8,6 +8,12 @@ interface Message {
   text: string;
 }
 
+/**
+ * @fileoverview AI Chat Interface Component
+ * @description Provides a real-time, conversational interface with the Google Gemini AI.
+ * Handles message state, loading states, and robust error handling for rate-limited API routes.
+ */
+
 export function AIChat() {
   const [messages, setMessages] = useState<Message[]>([
     { role: 'model', text: 'Hello! I am **CivicGuide AI**, powered by Google Gemini. I am here to help you understand the election process in a clear, non-partisan way.\n\nWhat would you like to know? 🗳️' }

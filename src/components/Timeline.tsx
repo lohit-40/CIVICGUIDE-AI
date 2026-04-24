@@ -50,6 +50,13 @@ const steps = [
   }
 ];
 
+/**
+ * @fileoverview Timeline Component
+ * @description A fully accessible, interactive tab-based component that visualizes
+ * the 7 phases of the Indian electoral process. Implements ARIA `tablist` and `tabpanel` 
+ * semantics for screen reader and keyboard navigability.
+ */
+
 export function Timeline() {
   const [activeStep, setActiveStep] = useState(0);
 

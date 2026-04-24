@@ -1,6 +1,13 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
 
+/**
+ * @fileoverview Chat API Endpoint
+ * @description Secure serverless function connecting the client interface to the 
+ * Google Gemini API. Includes IP-based rate limiting to prevent abuse and ensure 
+ * fair usage limits (15 requests / minute).
+ */
+
 const apiKey = process.env.GEMINI_API_KEY;
 
 const MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash-lite', 'gemini-flash-latest'];

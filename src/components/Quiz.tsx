@@ -36,6 +36,13 @@ const quizQuestions = [
   }
 ];
 
+/**
+ * @fileoverview Civic Knowledge Quiz Component
+ * @description An interactive, gamified assessment tool designed to test 
+ * user knowledge on Indian electoral processes. Integrates with the Google 
+ * Gemini API to provide dynamic, contextual hints for each question.
+ */
+
 export function Quiz() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [score, setScore] = useState(0);
