@@ -38,8 +38,8 @@ const quizQuestions = [
 
 /**
  * @fileoverview Civic Knowledge Quiz Component
- * @description An interactive, gamified assessment tool designed to test 
- * user knowledge on Indian electoral processes. Integrates with the Google 
+ * @description An interactive, gamified assessment tool designed to test
+ * user knowledge on Indian electoral processes. Integrates with the Google
  * Gemini API to provide dynamic, contextual hints for each question.
  */
 
@@ -101,19 +101,18 @@ export function Quiz() {
 
   if (quizFinished) {
     return (
-      <div style={{ width: '100%', maxWidth: 600, margin: '2rem auto', border: '3px solid var(--border)', boxShadow: 'var(--shadow-lg)', background: '#fff', padding: '3rem 2rem', textAlign: 'center' }}>
-        <div style={{ width: 80, height: 80, background: 'var(--yellow)', border: '3px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', boxShadow: 'var(--shadow-sm)' }}>
+      <div className="w-full max-w-[600px] mx-auto my-8 border-[3px] border-[var(--border)] shadow-[var(--shadow-lg)] bg-white p-12 text-center">
+        <div className="w-20 h-20 bg-[var(--yellow)] border-[3px] border-[var(--border)] flex items-center justify-center mx-auto mb-6 shadow-[var(--shadow-sm)]">
           <Trophy className="w-10 h-10 text-black" />
         </div>
-        <h2 style={{ fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '-0.03em' }}>QUIZ COMPLETE!</h2>
-        <p style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, textTransform: 'uppercase', color: '#666', marginBottom: '2rem' }}>YOU SCORED</p>
-        <div style={{ fontSize: '5rem', fontWeight: 900, color: 'var(--saffron)', lineHeight: 1, marginBottom: '2.5rem', letterSpacing: '-0.05em' }}>
-          {score} <span style={{ fontSize: '2rem', color: '#ccc' }}>/ {quizQuestions.length}</span>
+        <h2 className="text-[2.5rem] font-black uppercase mb-2 tracking-[-0.03em]">QUIZ COMPLETE!</h2>
+        <p className="font-mono font-bold uppercase text-[#666] mb-8">YOU SCORED</p>
+        <div className="text-[5rem] font-black text-[var(--saffron)] leading-none mb-10 tracking-[-0.05em]">
+          {score} <span className="text-[2rem] text-[#ccc]">/ {quizQuestions.length}</span>
         </div>
-        <button 
+        <button
           onClick={resetQuiz}
-          className="brut-btn brut-btn-saffron"
-          style={{ width: '100%', justifyContent: 'center', gap: '12px' }}
+          className="brut-btn brut-btn-saffron w-full justify-center gap-3"
         >
           <RefreshCcw className="w-5 h-5" /> RETAKE QUIZ
         </button>
@@ -124,30 +123,33 @@ export function Quiz() {
   const q = quizQuestions[currentIdx];
 
   return (
-    <section aria-label="Interactive Election Quiz" style={{ width: '100%', maxWidth: 720, margin: '0 auto 2rem', border: '3px solid var(--border)', boxShadow: 'var(--shadow-lg)', background: '#fff' }}>
+    <section aria-label="Interactive Election Quiz" className="w-full max-w-[720px] mx-auto mb-8 border-[3px] border-[var(--border)] shadow-[var(--shadow-lg)] bg-white">
       {/* Progress Bar */}
-      <div style={{ height: 8, background: '#e5e5e5', borderBottom: '3px solid var(--border)' }}>
-        <div style={{ height: '100%', background: 'var(--saffron)', transition: 'width 0.5s ease', width: `${((currentIdx + 1) / quizQuestions.length) * 100}%` }} />
+      <div className="h-2 bg-[#e5e5e5] border-b-[3px] border-[var(--border)]">
+        <div
+          className="h-full bg-[var(--saffron)] transition-all duration-500 ease-in-out"
+          style={{ width: `${((currentIdx + 1) / quizQuestions.length) * 100}%` }}
+        />
       </div>
 
-      <div style={{ padding: '2.5rem 2rem' }}>
+      <div className="p-8 pt-10">
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-          <span aria-live="polite" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#888' }}>
+        <div className="flex justify-between items-center mb-8">
+          <span aria-live="polite" className="font-mono text-[0.75rem] font-bold tracking-[0.1em] uppercase text-[#888]">
             QUESTION {currentIdx + 1} / {quizQuestions.length}
           </span>
-          <span aria-live="polite" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 700, padding: '6px 16px', background: 'var(--yellow)', color: '#000', border: '2px solid var(--border)', boxShadow: '2px 2px 0 var(--border)' }}>
+          <span aria-live="polite" className="font-mono text-[0.85rem] font-bold py-1.5 px-4 bg-[var(--yellow)] text-black border-2 border-[var(--border)] shadow-[2px_2px_0_var(--border)]">
             SCORE: {score}
           </span>
         </div>
 
         {/* Question */}
-        <h3 id="quiz-question" style={{ fontSize: '1.5rem', fontWeight: 800, lineHeight: 1.3, marginBottom: '2rem', letterSpacing: '-0.02em', textTransform: 'uppercase' }}>
+        <h3 id="quiz-question" className="text-[1.5rem] font-extrabold leading-[1.3] mb-8 tracking-[-0.02em] uppercase">
           {q.q}
         </h3>
 
         {/* Options */}
-        <div role="group" aria-labelledby="quiz-question" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+        <div role="group" aria-labelledby="quiz-question" className="flex flex-col gap-4 mb-8">
           {q.options.map((opt, idx) => {
             let cls = 'quiz-option';
             if (showResult) {
@@ -161,12 +163,15 @@ export function Quiz() {
                 onClick={() => handleSelect(idx)}
                 disabled={showResult}
                 aria-pressed={showResult && idx === selected}
-                className={cls}
-                style={{ fontFamily: 'var(--font-grotesk)', fontSize: '1rem' }}
+                className={`${cls} font-[var(--font-grotesk)] text-[1rem]`}
               >
                 <span>{opt}</span>
-                {showResult && idx === q.answer && <span style={{ width: 28, height: 28, background: 'var(--green)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', fontWeight: 900, border: '2px solid var(--border)', boxShadow: '2px 2px 0 var(--border)' }}>✓</span>}
-                {showResult && idx === selected && idx !== q.answer && <span style={{ width: 28, height: 28, background: 'var(--red)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', fontWeight: 900, border: '2px solid var(--border)', boxShadow: '2px 2px 0 var(--border)' }}>✗</span>}
+                {showResult && idx === q.answer && (
+                  <span className="w-7 h-7 bg-[var(--green)] text-white flex items-center justify-center text-[0.9rem] font-black border-2 border-[var(--border)] shadow-[2px_2px_0_var(--border)]">✓</span>
+                )}
+                {showResult && idx === selected && idx !== q.answer && (
+                  <span className="w-7 h-7 bg-[var(--red)] text-white flex items-center justify-center text-[0.9rem] font-black border-2 border-[var(--border)] shadow-[2px_2px_0_var(--border)]">✗</span>
+                )}
               </button>
             );
           })}
@@ -174,17 +179,18 @@ export function Quiz() {
 
         {/* Hint section */}
         {!showResult && (
-          <div style={{ marginBottom: hint ? '2rem' : 0 }}>
+          <div className={hint ? 'mb-8' : ''}>
             <button
               onClick={getHint}
               disabled={hintLoading || !!hint}
               aria-busy={hintLoading}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--saffron)', background: 'none', border: 'none', cursor: hintLoading || !!hint ? 'not-allowed' : 'pointer', opacity: !!hint ? 0.6 : 1, padding: 0 }}>
+              className="inline-flex items-center gap-2 font-bold text-[0.85rem] tracking-[0.05em] uppercase text-[var(--saffron)] bg-none border-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--saffron)]"
+            >
               {hintLoading ? <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" /> : <Lightbulb className="w-5 h-5" aria-hidden="true" />}
               {hint ? '💡 AI HINT RECEIVED' : 'NEED A HINT?'}
             </button>
             {hint && (
-              <div aria-live="polite" style={{ marginTop: 12, padding: '16px', background: 'var(--blue-light)', border: '2px solid var(--border)', boxShadow: '4px 4px 0 var(--border)', fontSize: '0.95rem', fontWeight: 600, lineHeight: 1.5 }}>
+              <div aria-live="polite" className="mt-3 p-4 bg-[var(--blue-light)] border-2 border-[var(--border)] shadow-[4px_4px_0_var(--border)] text-[0.95rem] font-semibold leading-[1.5]">
                 {hint}
               </div>
             )}
@@ -194,23 +200,17 @@ export function Quiz() {
         {/* Result feedback */}
         {showResult && (
           <div aria-live="assertive" className="animate-in slide-in-from-bottom-4 duration-300">
-            <div style={{
-              padding: '1.25rem 1.5rem',
-              marginBottom: '1.5rem',
-              border: '3px solid var(--border)',
-              background: selected === q.answer ? 'var(--green-light)' : 'var(--red-light)',
-              boxShadow: '4px 4px 0 var(--border)',
-            }}>
-              <p style={{ fontWeight: 900, fontSize: '1rem', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+            <div className={`p-5 mb-6 border-[3px] border-[var(--border)] shadow-[4px_4px_0_var(--border)] ${selected === q.answer ? 'bg-[var(--green-light)]' : 'bg-[var(--red-light)]'}`}>
+              <p className="font-black text-[1rem] mb-2 uppercase tracking-[0.02em]">
                 {selected === q.answer ? '🎉 CORRECT!' : '💡 WRONG ANSWER'}
               </p>
-              <p style={{ fontSize: '0.95rem', lineHeight: 1.6, margin: 0, color: '#111', fontWeight: 500 }}>{q.explanation}</p>
+              <p className="text-[0.95rem] leading-[1.6] m-0 text-[#111] font-medium">{q.explanation}</p>
             </div>
 
             <button
               onClick={nextQuestion}
-              className="brut-btn brut-btn-saffron"
-              style={{ width: '100%', justifyContent: 'center', fontSize: '1rem', padding: '16px' }}>
+              className="brut-btn brut-btn-saffron w-full justify-center text-[1rem] py-4 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[var(--fg)]"
+            >
               {currentIdx === quizQuestions.length - 1 ? 'SEE FINAL RESULTS' : 'NEXT QUESTION'} <ArrowRight className="w-5 h-5" />
             </button>
           </div>

@@ -14,6 +14,15 @@ interface Message {
  * Handles message state, loading states, and robust error handling for rate-limited API routes.
  */
 
+const escapeHtml = (unsafe: string) => {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
 export function AIChat() {
   const [messages, setMessages] = useState<Message[]>([
     { role: 'model', text: 'Hello! I am **CivicGuide AI**, powered by Google Gemini. I am here to help you understand the election process in a clear, non-partisan way.\n\nWhat would you like to know? 🗳️' }
@@ -62,7 +71,6 @@ export function AIChat() {
     }
   };
 
-
   const clearChat = () => {
     setMessages([{ role: 'model', text: 'Chat cleared. How can I help you today?' }]);
   };
@@ -72,16 +80,16 @@ export function AIChat() {
   };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', maxWidth: 1200, margin: '0 auto' }}>
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 max-w-[1200px] mx-auto">
       
       {/* Sidebar Controls */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        <div style={{ border: '3px solid var(--border)', background: 'var(--yellow)', padding: '1.5rem', boxShadow: '5px 5px 0 var(--border)' }}>
-          <h3 style={{ fontWeight: 900, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div className="flex flex-col gap-6">
+        <div className="border-[3px] border-[var(--border)] bg-[var(--yellow)] p-6 shadow-[5px_5px_0_var(--border)]">
+          <h3 className="font-black text-[0.75rem] uppercase tracking-[0.1em] mb-3 flex items-center gap-2">
             <Sparkles className="w-4 h-4" /> CONTEXT ENGINE
           </h3>
           <select 
-            style={{ width: '100%', background: '#fff', border: '3px solid var(--border)', padding: '10px', fontWeight: 700, fontFamily: 'var(--font-mono)', outline: 'none', cursor: 'pointer' }}
+            className="w-full bg-white border-[3px] border-[var(--border)] p-2.5 font-bold font-mono outline-none cursor-pointer"
             value={contextStep}
             onChange={(e) => setContextStep(e.target.value)}
           >
@@ -91,14 +99,14 @@ export function AIChat() {
             <option value="Voting Day">🗳️ VOTING DAY</option>
             <option value="Election Results">📊 ELECTION RESULTS</option>
           </select>
-          <p style={{ fontSize: '0.7rem', fontWeight: 600, color: '#333', marginTop: 10, lineHeight: 1.4 }}>
+          <p className="text-[0.7rem] font-semibold text-[#333] mt-2.5 leading-[1.4]">
             CHANGING CONTEXT HELPS GEMINI FOCUS ON SPECIFIC ECI RULES.
           </p>
         </div>
 
-        <div style={{ border: '3px solid var(--border)', background: '#fff', padding: '1.5rem', boxShadow: '5px 5px 0 var(--border)' }}>
-          <h3 style={{ fontWeight: 900, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 12 }}>💡 QUICK PROMPTS</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <div className="border-[3px] border-[var(--border)] bg-white p-6 shadow-[5px_5px_0_var(--border)]">
+          <h3 className="font-black text-[0.75rem] uppercase tracking-[0.1em] mb-3">💡 QUICK PROMPTS</h3>
+          <div className="flex flex-col gap-2">
             {[
               "LOK SABHA VS RAJYA SABHA?",
               "HOW TO GET A VOTER ID?",
@@ -109,9 +117,7 @@ export function AIChat() {
               <button 
                 key={q}
                 onClick={() => handleSuggestion(q)}
-                style={{ textAlign: 'left', fontSize: '0.75rem', fontWeight: 700, padding: '8px 12px', background: 'transparent', border: '2px solid transparent', borderBottom: '2px solid #eee', cursor: 'pointer', transition: 'all 0.1s' }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--saffron)'; e.currentTarget.style.background = 'var(--saffron-light)'; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'transparent'; e.currentTarget.style.borderBottom = '2px solid #eee'; e.currentTarget.style.background = 'transparent'; }}
+                className="text-left text-[0.75rem] font-bold px-3 py-2 bg-transparent border-2 border-transparent border-b-[#eee] cursor-pointer transition-all duration-100 hover:border-b-[var(--saffron)] hover:border-[var(--saffron)] hover:bg-[var(--saffron-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--saffron)] focus-visible:bg-[var(--saffron-light)] focus-visible:border-[var(--saffron)]"
               >
                 {q}
               </button>
@@ -121,64 +127,55 @@ export function AIChat() {
       </div>
 
       {/* Main Chat Area */}
-      <div style={{ display: 'flex', flexDirection: 'column', height: 600, border: '3px solid var(--border)', background: '#fff', boxShadow: '8px 8px 0 var(--border)', overflow: 'hidden' }}>
+      <div className="flex flex-col h-[600px] border-[3px] border-[var(--border)] bg-white shadow-[8px_8px_0_var(--border)] overflow-hidden">
         
         {/* Chat Header */}
-        <div style={{ padding: '1rem 1.5rem', borderBottom: '3px solid var(--border)', background: 'var(--fg)', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 40, height: 40, background: 'var(--saffron)', border: '2px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="px-6 py-4 border-b-[3px] border-[var(--border)] bg-[var(--fg)] text-white flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-[var(--saffron)] border-2 border-white flex items-center justify-center">
               <Bot className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 style={{ fontSize: '1rem', fontWeight: 900, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>CIVICGUIDE AI</h2>
-              <p style={{ fontSize: '0.65rem', fontWeight: 600, color: 'var(--yellow)', margin: 0, fontFamily: 'var(--font-mono)' }}>GEMINI 2.5 FLASH POWERED</p>
+              <h2 className="text-[1rem] font-black m-0 uppercase tracking-[0.05em]">CIVICGUIDE AI</h2>
+              <p className="text-[0.65rem] font-semibold text-[var(--yellow)] m-0 font-mono">GEMINI 2.5 FLASH POWERED</p>
             </div>
           </div>
-          <button onClick={clearChat} style={{ background: 'transparent', border: '2px solid #fff', color: '#fff', padding: 6, cursor: 'pointer' }}>
+          <button onClick={clearChat} className="bg-transparent border-2 border-white text-white p-1.5 cursor-pointer hover:bg-white hover:text-[var(--fg)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
             <Trash2 className="w-4 h-4" />
           </button>
         </div>
 
         {/* Messages List */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem', background: '#f9f9f9', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        <div className="flex-1 overflow-y-auto p-6 bg-[#f9f9f9] flex flex-col gap-5">
           {messages.map((msg, idx) => (
-            <div key={idx} style={{ display: 'flex', gap: 12, justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>
+            <div key={idx} className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               {msg.role === 'model' && (
-                <div style={{ width: 32, height: 32, background: 'var(--fg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '2px solid var(--border)' }}>
+                <div className="w-8 h-8 bg-[var(--fg)] flex items-center justify-center shrink-0 border-2 border-[var(--border)]">
                   <Bot className="w-4 h-4 text-white" />
                 </div>
               )}
-              <div style={{ 
-                maxWidth: '85%',
-                padding: '1rem',
-                border: '3px solid var(--border)',
-                background: msg.role === 'user' ? 'var(--blue-light)' : '#fff',
-                boxShadow: '3px 3px 0 var(--border)',
-                fontSize: '0.9rem',
-                fontWeight: 500,
-                lineHeight: 1.5,
-              }}>
+              <div className={`max-w-[85%] p-4 border-[3px] border-[var(--border)] shadow-[3px_3px_0_var(--border)] text-[0.9rem] font-medium leading-[1.5] ${msg.role === 'user' ? 'bg-[var(--blue-light)]' : 'bg-white'}`}>
                 <div 
                   dangerouslySetInnerHTML={{ 
-                    __html: msg.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br/>')
+                    __html: escapeHtml(msg.text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br/>')
                   }} 
                 />
               </div>
               {msg.role === 'user' && (
-                <div style={{ width: 32, height: 32, background: 'var(--saffron)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '2px solid var(--border)' }}>
+                <div className="w-8 h-8 bg-[var(--saffron)] flex items-center justify-center shrink-0 border-2 border-[var(--border)]">
                   <User className="w-4 h-4 text-white" />
                 </div>
               )}
             </div>
           ))}
           {loading && (
-            <div role="status" aria-label="AI is generating a response" style={{ display: 'flex', gap: 12 }}>
-              <div style={{ width: 32, height: 32, background: 'var(--fg)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid var(--border)' }}>
+            <div role="status" aria-label="AI is generating a response" className="flex gap-3">
+              <div className="w-8 h-8 bg-[var(--fg)] flex items-center justify-center border-2 border-[var(--border)]">
                 <Bot className="w-4 h-4 text-white" aria-hidden="true" />
               </div>
-              <div style={{ padding: '0.75rem 1rem', border: '3px solid var(--border)', background: '#fff', boxShadow: '3px 3px 0 var(--border)', display: 'flex', alignItems: 'center', gap: 10 }}>
-                <Loader2 className="w-4 h-4 animate-spin text-saffron" aria-hidden="true" />
-                <span style={{ fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase' }}>GEMINI IS THINKING...</span>
+              <div className="py-3 px-4 border-[3px] border-[var(--border)] bg-white shadow-[3px_3px_0_var(--border)] flex items-center gap-2.5">
+                <Loader2 className="w-4 h-4 animate-spin text-[var(--saffron)]" aria-hidden="true" />
+                <span className="text-[0.8rem] font-extrabold uppercase">GEMINI IS THINKING...</span>
               </div>
             </div>
           )}
@@ -186,8 +183,8 @@ export function AIChat() {
         </div>
 
         {/* Input Form */}
-        <form onSubmit={handleSubmit} style={{ padding: '1rem 1.5rem', background: '#fff', borderTop: '3px solid var(--border)' }}>
-          <div style={{ display: 'flex', gap: 12 }}>
+        <form onSubmit={handleSubmit} className="p-4 px-6 bg-white border-t-[3px] border-[var(--border)]">
+          <div className="flex gap-3">
             <label htmlFor="civic-chat-input" className="sr-only">Ask a question about Indian elections</label>
             <input
               id="civic-chat-input"
@@ -199,15 +196,14 @@ export function AIChat() {
               aria-required="true"
               autoComplete="off"
               maxLength={1000}
-              style={{ flex: 1, padding: '12px 16px', border: '3px solid var(--border)', fontWeight: 700, fontSize: '0.9rem', outline: 'none', background: 'var(--bg)' }}
+              className="flex-1 p-3 px-4 border-[3px] border-[var(--border)] font-bold text-[0.9rem] outline-none bg-[var(--bg)] focus:border-[var(--saffron)]"
               disabled={loading}
             />
             <button 
               type="submit" 
               disabled={loading || !input.trim()}
-              className="brut-btn brut-btn-saffron"
+              className="brut-btn brut-btn-saffron px-5 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--fg)] focus-visible:ring-offset-2"
               aria-label="Send message to CivicGuide AI"
-              style={{ padding: '0 20px' }}
             >
               <Send className="w-5 h-5" aria-hidden="true" />
             </button>

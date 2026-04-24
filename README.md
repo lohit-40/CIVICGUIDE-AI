@@ -76,13 +76,15 @@ We heavily leveraged the Google Developer Ecosystem to build a seamless experien
 
 ---
 
-## 🚀 Core Features
+## 🚀 Core Features — 5 Tools for Every Indian Voter
 
-1.  **AI Civic Assistant:** Ask complex questions ("What is the Model Code of Conduct?" or "How do VVPATs work?") and get instant, factual answers powered by Gemini.
-2.  **Phase-by-Phase Timeline:** An interactive, accessible tab-based timeline explaining the 7 critical phases of an Indian election.
-3.  **Voter Resources Hub:** Direct access to official ECI portals (e-EPIC download, Voter Registration, Electoral Roll search).
-4.  **Gamified Civic Quiz:** Test your knowledge on Indian democracy with AI-generated hints.
-5.  **Live Election News:** A brutalist news ticker aggregating top stories directly from Google News.
+| Tool | Description |
+|:---|:---|
+| 📋 **Interactive Election Timeline** | A fully keyboard-navigable, ARIA-compliant step-by-step walkthrough of the 4 major phases of an Indian election — Voter Registration, Election Notification, Polling Day (EVM), and Counting & Results. |
+| 💬 **AI Civic Assistant (CivicGuide AI)** | A real-time chat interface powered by **Google Gemini 2.5 Flash**. Ask complex questions about the Indian electoral system and receive instant, factual, non-partisan answers. Includes IP-based rate limiting (15 req/min) and XSS-safe input sanitization. |
+| 📍 **Official Voter Resources Hub** | Direct, clearly labeled links to official ECI portals — Electoral Roll Search, Voter Service Portal (e-EPIC), and the Know Your Candidate app — plus an embedded **Google Maps** panel to locate polling booths by pincode. |
+| 🧠 **Gamified Civic Quiz** | A 5-question knowledge assessment on Indian democracy, complete with a progress bar, live score tracker, AI-generated hints via Gemini, and an animated result screen. |
+| 📰 **Live Election News Feed** | A brutalist news grid pulling real-time articles from the **Google News RSS Feed**, tagged by topic (ECI, Lok Sabha, EVM, Voting), with a one-click refresh. |
 
 ---
 

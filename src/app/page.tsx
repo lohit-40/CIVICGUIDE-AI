@@ -59,6 +59,7 @@ export default function Home() {
               <button
                 key={t.id}
                 onClick={() => scrollToApp(t.id)}
+                aria-current={activeTab === t.id ? 'page' : undefined}
                 className={`px-3.5 py-1.5 font-bold text-[0.75rem] tracking-[0.08em] border-2 cursor-pointer transition-all ${
                   activeTab === t.id 
                     ? 'border-[var(--saffron)] bg-[var(--saffron)] text-white' 
@@ -111,6 +112,7 @@ export default function Home() {
               <button 
                 key={t.id} 
                 onClick={() => { scrollToApp(t.id); setMobileMenuOpen(false); }}
+                aria-current={activeTab === t.id ? 'page' : undefined}
                 className={`block w-full text-left px-6 py-3.5 font-bold text-[0.85rem] tracking-[0.08em] cursor-pointer border-none border-b border-[#333] ${
                   activeTab === t.id ? 'bg-[var(--saffron)] text-white' : 'bg-transparent text-white'
                 }`}
@@ -162,6 +164,7 @@ export default function Home() {
               <button
                 key={t.id}
                 onClick={() => setActiveTab(t.id as Tab)}
+                aria-current={activeTab === t.id ? 'page' : undefined}
                 className={`shrink-0 px-[22px] py-[14px] font-extrabold text-[0.78rem] tracking-[0.08em] uppercase border-none border-r-[3px] border-[var(--border)] cursor-pointer transition-all whitespace-nowrap ${
                   activeTab === t.id 
                     ? 'border-b-[3px] border-b-transparent bg-[var(--saffron)] text-white' 
