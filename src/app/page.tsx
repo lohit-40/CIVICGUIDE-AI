@@ -398,7 +398,7 @@ export default function Home() {
                 <span style={{ fontWeight: 800, fontSize: '1rem', letterSpacing: '-0.01em' }}>CIVICGUIDE AI</span>
               </div>
               <p style={{ fontSize: '0.85rem', color: '#999', lineHeight: 1.7, margin: '0 0 16px' }}>
-                Empowering informed voters through AI-driven, non-partisan civic education. Built for the Breaking Apps Hackathon.
+                Empowering informed voters through AI-driven, non-partisan civic education. Built for the Virtual Prompt War.
               </p>
               <div className="brut-tag brut-tag-saffron">INDIA 🇮🇳</div>
             </div>
@@ -439,7 +439,7 @@ export default function Home() {
               CivicGuide AI is non-partisan and does not endorse any candidate or political party.
             </p>
             <p style={{ color: '#666', fontSize: '0.8rem', margin: 0, fontFamily: 'var(--font-mono)' }}>
-              Breaking Apps Hackathon 2026 — Built with ❤️ for India
+              Virtual Prompt War 2026 — Built with ❤️ for India
             </p>
           </div>
         </div>

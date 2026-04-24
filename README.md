@@ -1,7 +1,7 @@
 <div align="center">
   <img src="public/window.svg" width="100" height="100" alt="CivicGuide Logo">
   <h1>🗳️ CIVICGUIDE AI</h1>
-  <p><strong>Built for the Breaking Apps Hackathon 2026</strong></p>
+  <p><strong>Built for the Virtual Prompt War Hackathon 2026</strong></p>
   <p>Empowering informed Indian voters through AI-driven, non-partisan civic education.</p>
   
   [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
@@ -134,5 +134,5 @@ Want to run CivicGuide AI locally?
 ---
 
 <div align="center">
-  <p><i>CivicGuide AI is an educational tool. It is non-partisan and not officially affiliated with the Election Commission of India.</i></p>
+  <p><i>CivicGuide AI is an educational tool. It is non-partisan and not officially affiliated with the Election Commission of India. Built for Virtual Prompt War 2026.</i></p>
 </div>
