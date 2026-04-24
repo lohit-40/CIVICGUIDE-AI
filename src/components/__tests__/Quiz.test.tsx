@@ -134,3 +134,22 @@ describe('Quiz Component — Full Flow & Completion', () => {
     expect(screen.getByText('QUESTION 1 / 5')).toBeInTheDocument();
   });
 });
+
+describe('Quiz Component — Hint Feature', () => {
+  it('requests and displays a hint', async () => {
+    render(<Quiz />);
+    const hintBtn = screen.getByText(/NEED A HINT\?/i);
+    fireEvent.click(hintBtn);
+    expect(await screen.findByText(/AI HINT RECEIVED/i)).toBeInTheDocument();
+    expect(screen.getByText('Mock AI hint for testing')).toBeInTheDocument();
+  });
+
+  it('handles hint API errors gracefully', async () => {
+    global.fetch = vi.fn(() => Promise.reject('API Error')) as unknown as typeof fetch;
+    render(<Quiz />);
+    const hintBtn = screen.getByText(/NEED A HINT\?/i);
+    fireEvent.click(hintBtn);
+    expect(await screen.findByText(/AI HINT RECEIVED/i)).toBeInTheDocument();
+    expect(screen.getByText(/Think carefully about the election timelines and rules/i)).toBeInTheDocument();
+  });
+});

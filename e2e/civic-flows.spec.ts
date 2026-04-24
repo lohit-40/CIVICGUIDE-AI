@@ -7,8 +7,7 @@ test.describe('CivicGuide AI - Core User Flows', () => {
     // Verify title and basic structure
     await expect(page).toHaveTitle(/CivicGuide AI/);
     await expect(page.locator('h1')).toBeVisible();
-    await expect(page.locator('h1')).toContainText('UNDERSTAND');
-    await expect(page.locator('h1')).toContainText('INDIAN DEMOCRACY');
+    await expect(page.locator('h1')).toHaveText(/UNDERSTANDINDIANDEMOCRACY/);
   });
 
   test('⚙️ Hybrid Test Strategy — Verify Quiz Interaction', async ({ page }) => {
@@ -17,9 +16,9 @@ test.describe('CivicGuide AI - Core User Flows', () => {
     await page.waitForLoadState('domcontentloaded');
 
     // Find and navigate to Quiz section
-    const quizLink = page.locator('text=Interactive Quiz');
-    if (await quizLink.isVisible()) {
-        await quizLink.click();
+    const quizTab = page.locator('button', { hasText: 'QUIZ' }).first();
+    if (await quizTab.isVisible()) {
+        await quizTab.click();
     } else {
         // Fallback if we just test the component directly (assuming it's on the page)
         await expect(page.locator('text=QUESTION 1 / 5')).toBeVisible();

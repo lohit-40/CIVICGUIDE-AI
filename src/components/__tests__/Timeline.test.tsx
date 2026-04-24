@@ -43,6 +43,13 @@ describe('Timeline Component', () => {
     expect(screen.getByText(/Model Code of Conduct/i)).toBeInTheDocument();
   });
 
+  it('advances to next step when NEXT STEP button is clicked', () => {
+    render(<Timeline />);
+    const nextBtn = screen.getByText(/NEXT STEP/i);
+    fireEvent.click(nextBtn);
+    expect(screen.getByText(/Model Code of Conduct/i)).toBeInTheDocument();
+  });
+
   it('has accessible tablist and tabpanel semantics', () => {
     render(<Timeline />);
     expect(screen.getByRole('tablist')).toBeInTheDocument();
